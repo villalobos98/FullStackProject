@@ -1,7 +1,7 @@
 {
-  "name": "devconnector",
+  "name": "MERNProject",
   "version": "1.0.0",
-  "description": "Social network for developers",
+  "description": "Social network",
   "main": "server.js",
   "scripts": {
     "start": "node server",
@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
-  "author": "Brad Traversy",
+  "author": "Isaias Villalobos",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.0",
