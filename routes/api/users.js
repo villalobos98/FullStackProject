@@ -6,6 +6,7 @@ const { check, validation, validationResult } = require('express-validator');
 const { Mongoose } = require('mongoose');
 const Users = require('../../models/Users');
 const User = require('../../models/Users');
+const jwt = require('jsonwebtoken');
 
 //route POST /api/users
 //desc: DESCRIBE THIS STUFF
@@ -62,7 +63,11 @@ router.post(
 
       await user.save();
 
-      res.send('User route');
+      const payload = {
+        users: {
+          id: user.id
+        }
+      }
     } catch (err) {
       console.log('The errors are ->>>>>>>>>' + err);
       console.error(err.message);
