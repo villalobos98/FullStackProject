@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://isaias123:isaias123@developerconnections.n9uvp.mongodb.net/<developerconnections>?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://isaias123:isaias123@developerconnections.n9uvp.mongodb.net/<developerconnections>?retryWrites=true&w=majority",
+    "jwtToken": "mysecrettoken"
 }

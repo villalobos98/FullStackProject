@@ -7,9 +7,11 @@ const { Mongoose } = require('mongoose');
 const Users = require('../../models/Users');
 const User = require('../../models/Users');
 const jwt = require('jsonwebtoken');
+const config = require('config');
 
 //route POST /api/users
-//desc: DESCRIBE THIS STUFF
+//Desc: 
+//Notes
 //@access: Public route, don't need a token
 router.post(
   '/',
@@ -29,26 +31,23 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // get users gravatar
-    // encrypt password
-    // return jwtoken
     const { name, email, password } = req.body;
     try {
-      // See if user exists in the database
       let user = await User.findOne({ email });
 
+      // See if user exists in the database
       if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'User already exists' }] });
+        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
-      console.log(req.body);
+
+      // console.log(req.body);
       const avatar = gravatar.url(email, {
         s: 200,
         r: 'pg',
         d: 'mm',
       });
 
+      // Create the user
       user = new User({
         name,
         email,
@@ -56,24 +55,39 @@ router.post(
         password,
       });
 
-      //Whenever there is a promise make sure to use await
+      //Hash the password
       const salt = await bcrypt.genSalt(10);
-
       user.password = await bcrypt.hash(password, salt);
-
+      
+      //Save user to the database.
       await user.save();
-
+      
+      //Create the payload
       const payload = {
         users: {
           id: user.id
         }
       }
+
+      //Sign the token
+      jwt.sign(
+        payload, 
+        config.get("jwtToken"),
+        {expiresIn: 360000}, 
+        (err, token) => {
+          if(err){
+            throw err;
+          }else{
+            res.json({token});
+          }
+        }
+      );
     } catch (err) {
-      console.log('The errors are ->>>>>>>>>' + err);
+      // Useful for debugging
+      // console.log(err);
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-    //Useful for debugging
   }
 );
 
