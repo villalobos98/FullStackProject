@@ -1,7 +1,7 @@
 # MERN Project
 
-A social media site where people can like post
-see each other in new ways and view each other's 
+A social media site where people can post,
+see each other in new ways, and view each other's 
 content.
 ## Getting Started
 
