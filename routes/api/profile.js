@@ -117,4 +117,44 @@ router.post(
   }
 );
 
+//route GET /api/profile
+//desc: Get all profiles
+//@access: Public
+
+router.get('/', async (req, res) => {
+  try {
+    //Populting the User Object with the items in the array for all profiles
+    const profiles = await Profile.find().populate('user', ['name', 'avatar', "_id" ]);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+//route GET /api/profile/user/:user_id
+//desc: Get profile by user ID
+//@access: Public
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    //Get only one user back, so use findOne, URL contains the user id so use params.user_id
+    const profile = await Profile.findOne({user: req.params.user_id}).populate('user', ['name', 'avatar' ]);
+
+    //If no profile exist make sure to send a message to the user
+    if(!profile){
+      return res.status(400).json({ msg: 'Profile Not Found' });
+    }
+    res.json(profile);
+  } catch (err) {
+    console.error(err.message);
+    //Check if the error is with the object ID, meaning malformed, too short, too long, or unproper
+    if (err.kind == "ObjectId"){
+      return res.status(400).json({ msg: 'Profile Not Found' });
+    }
+    res.status(500).send('Server Error');
+
+  }
+});
+
 module.exports = router;
