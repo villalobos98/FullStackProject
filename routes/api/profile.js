@@ -247,7 +247,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
   //Get the profile of the logged in user
   const profile = await Profile.findOne({ user: req.user.id });
 
-  //Get remove index, not sure how really
+  //Get remove index of where to remove the id
   const idx = profile.experience
     .map((item) => item.id)
     .indexOf(req.params.exp_id);
