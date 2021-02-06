@@ -12,10 +12,9 @@ content.
 What things you need to install the software and how to install them
 
 - Install Node 
-- Install VSCode
+- Install VSCode or any text editor that you like
 
 ### Installing
-
 
 ```
 - npm install
