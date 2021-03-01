@@ -1,4 +1,6 @@
 const express = require('express');
+const request = require('request');
+const config = require('config');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
@@ -403,5 +405,39 @@ router.put(
     }
   }
 );
+
+//route GET /api/profile/github/:username
+//desc: Get user profile from GitHub
+//@access: Public, viewing a profile is public
+router.get('/github/:username', (req, res) => {
+  try {
+    
+    //This config object, is needed for the request to the GitHub API. 
+    const options = {
+      uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5
+      &sort=created:asc
+      &client_id=${config.get('githubClientID')}}
+      &client_secret=${config.get('githubSecret')}`,
+      method: 'GET',
+      headers: {'user-agent': 'node.js'}
+    }
+
+    //Request takes the optionsm and a callback function. 
+    request(options, (error, response, body) => {
+      if (error) console.error(error);
+      
+      if (response.statusCode !== 200) {
+        var serverResponse = res.status(404);
+        return serverResponse.json({ msg: 'No Github profile found' });
+      }
+      res.json(JSON.parse(body));
+    });
+  } catch(err){
+    console.error(err.message);
+    var serverResponse = res.status(500);
+    return serverResponse.send('Server Error');
+  }
+});
+
 
 module.exports = router;

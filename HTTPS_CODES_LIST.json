@@ -1,0 +1,52 @@
+[{
+        "HTTPS_CODES": [{
+                "100": "Continue",
+                "101": "Swithcing Protocol",
+                "102": "Processing",
+                "103": "Early Hints"
+            },
+            {
+                "200": "OK",
+                "201": "Created",
+                "202": "Accepted",
+                "203": "Non-Authoritative Information",
+                "204": "No Content",
+                "205": "Reset Content",
+                "206": "Partial Content",
+                "207": "Multi-Status",
+                "208": "OK",
+                "226": "Created"
+            }, {
+                "200": "OK",
+                "201": "Created",
+                "202": "Accepted",
+                "203": "Non-Authoritative Information"
+            }
+
+        ]
+    },
+    {
+        "name": "bob",
+        "scores": [{
+                "type": "a",
+                "value": 0
+            },
+            {
+                "type": "b",
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "sue",
+        "scores": [{
+                "type": "a",
+                "value": 1
+            },
+            {
+                "type": "b",
+                "value": 0
+            }
+        ]
+    }
+]
