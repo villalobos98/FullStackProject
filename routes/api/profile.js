@@ -440,4 +440,52 @@ router.get('/github/:username', (req, res) => {
 });
 
 
+var client_id = 'd4124aa516f94a1181b02e1be4ea2d7c'; // Your client id
+var client_secret = 'ceffdaf4cc1a4073be126bddfd600c20'; // Your secret
+
+// your application requests authorization
+var authOptions = {
+  url: 'https://accounts.spotify.com/api/token',
+  headers: {
+    'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+  },
+  form: {
+    grant_type: 'client_credentials'
+  },
+  json: true
+};
+
+router.get('/spotify', async (req, res, next) => {
+    var authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      headers: {
+        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+      },
+      form: {
+        grant_type: 'client_credentials'
+      },
+      json: true
+    };
+
+    request.post(authOptions, async (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        // use the access token to access the Spotify Web API
+        var token = body.access_token;
+        // console.log(token);
+        var options = {
+          url: 'https://api.spotify.com/v1/users/sillysalamander',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          json: true
+        };
+        request.get(options, function (error, response, body) {
+          return res.json(body);
+        });
+      }
+    });
+
+});
+
+
 module.exports = router;
