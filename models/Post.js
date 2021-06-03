@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  //
+  // a User
   user: {
     type: Schema.Types.ObjectId,
     ref: "users",
   },
-  // The text that is in the post
+  // The text that is in the post, will come from the body of the request
   text: {
     type: String,
     required: true,
@@ -16,6 +16,7 @@ const PostSchema = new Schema({
   name: {
     type: String,
   },
+  // Avatar of the user
   avatar: {
     type: String,
   },
@@ -58,4 +59,4 @@ const PostSchema = new Schema({
   ],
 });
 
-module.exports = Post = mongoose.model("Posts", PostSchema);
+module.exports = Post = mongoose.model("posts", PostSchema);
