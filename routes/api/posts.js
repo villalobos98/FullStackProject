@@ -51,13 +51,13 @@ router.post(
 router.get('/', auth, async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: 'descending' })
-    if (!exists(posts)) {
+    if (!(posts)) {
       return res.json({ mes: 'Posts do not exist' })
     }
     res.json(posts)
   } catch (err) {
     console.error(err.message)
-    res.status(500).send('Server Error')
+    res.status(500).send('Server Error');
   }
 })
 
@@ -105,6 +105,58 @@ router.delete('/:id', auth, async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(404).json({ message: 'Post Not Found' })
     }
+    res.status(500).send('Server Error')
+  }
+})
+
+
+// route PUT /api/posts/like/:id
+// desc: When the user interacts with the frontend, it will add to the likes array
+// @access: Private route
+router.put('/like/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    //Check if post has already been liked by user, by checking if the array contains more than 1 of the same user ID
+    if (post.likes.filter(like => console.log(like.user.toString() === req.user.id)).length > 0) {
+      return res.status(400).json({ message: 'Post already liked!' })
+    }
+    //Add user to the likes array, keep track of the user
+    post.likes.unshift({ user: req.user.id });
+
+    //Update the model/save the new version of the model
+    post.save();
+
+    return res.json(post.likes);
+  } catch (err) {
+    console.log(err)
+    res.status(500).send('Server Error')
+  }
+})
+
+
+// route PUT /api/posts/unlike/:id
+// desc: When the user interacts with the frontend, it will remove likes array
+// @access: Private route
+router.put('/unlike/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    //Check if post has already been liked by user, by checking if the array contains more than 1 of the same user ID
+    // if (post.likes.filter(like => console.log(like.user.toString() === req.user.id)).length === 0) {
+    //   return res.status(400).json({ message: 'Post not yet liked!' })
+    // }
+    // Get the user id in an array
+    const userIDArray = post.likes.map(like => like.user.toString());
+
+    //Find the correct post, by the correct user who made the post
+    const removeIdx = userIDArray.indexOf(req.params.id);
+    //Remove the post by the user
+    post.likes.splice(removeIdx, 1);
+
+    //Update the model/save the new version of the model
+    post.save();
+    return res.json(post.likes);
+  } catch (err) {
+    console.error(err);
     res.status(500).send('Server Error')
   }
 })
