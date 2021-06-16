@@ -41,6 +41,7 @@ What things you need to install the software and how to install them
 ## Authors
 
 - **Isaias Villalobos**
+- **Special thanks to Brad for helping me get started**
 
 ## License
 
