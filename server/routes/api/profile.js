@@ -458,7 +458,15 @@ router.get('/spotify', async (req, res, next) => {
         json: true
       }
       request.get(options, function (error, response, body) {
-        return res.json(body)
+        try {
+          if (error) {
+            throw new Error(error.message)
+          }
+          return res.json(body)
+        } catch (error) {
+          console.log(error.message)
+          return res.status(500).json({ msg: 'Internal Server Error' })
+        }
       })
     }
   })

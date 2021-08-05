@@ -1,24 +1,24 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
   // a User
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'users'
+    ref: "users",
   },
   // The text that is in the post, will come from the body of the request
   text: {
     type: String,
-    required: true
+    required: true,
   },
   // Name of the user
   name: {
-    type: String
+    type: String,
   },
   // Avatar of the user
   avatar: {
-    type: String
+    type: String,
   },
   // User can like the post, needs to ref user, so that we know which user liked which post
   // User objectId included so we avoid infinite likes
@@ -26,13 +26,13 @@ const PostSchema = new Schema({
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: 'users'
-      }
-    }
+        ref: "users",
+      },
+    },
   ],
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 
   // Add comments to posts associated with a user
@@ -40,24 +40,24 @@ const PostSchema = new Schema({
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: 'users'
+        ref: "users",
       },
       text: {
         type: String,
-        required: true
+        required: true,
       },
       name: {
-        type: String
+        type: String,
       },
       avatar: {
-        type: String
+        type: String,
       },
       date: {
         type: Date,
-        default: Date.now
-      }
-    }
-  ]
-})
-const Post = mongoose.model('posts', PostSchema)
-module.exports = Post
+        default: Date.now,
+      },
+    },
+  ],
+});
+const Post = mongoose.model("posts", PostSchema);
+module.exports = Post;
